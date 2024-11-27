@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sac_mppi"
+version = "0.1.0"
+description = "MPPI with SAC baseline, CMU robot learning course project"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+
+dependencies = [
+    "art",
+    "brax",
+    "emoji",
+    "GitPython",
+    "ipdb",
+    "jax-cosmo",
+    "jax[cuda12]",
+    "matplotlib",
+    "mujoco",
+    "numpy<2.0.0",
+    "numpy>=1.16.4",
+    "onnx",
+    "opencv-python",
+    "python-magic",
+    "pyyaml",
+    "scienceplots",
+    "tensorboard",
+    "toml",
+    "torch>=1.10.0",
+    "torchvision>=0.5.0",
+    "tqdm",
+    "tyro",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["sac_mppi", "sac_mppi.*"]
+
+[project.scripts]
+sac_mppi = "sac_mppi.run:main"

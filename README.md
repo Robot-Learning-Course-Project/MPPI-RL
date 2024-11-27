@@ -1,14 +1,38 @@
 # New Repository
 
-[![pre-commit](https://github.com/Robot-Learning-Course-Project/Repository-Template/actions/workflows/pre-commit.yml/badge.svg)](https://github.com/Robot-Learning-Course-Project/Repository-Template/actions/workflows/pre-commit.yml)
+[![pre-commit](https://github.com/Robot-Learning-Course-Project/SAC-MPPI/actions/workflows/pre-commit.yml/badge.svg)](https://github.com/Robot-Learning-Course-Project/SAC-MPPI/actions/workflows/pre-commit.yml)
 
-## Usage Guidelines
+## Installation
 
-1. Change [LICENSE](LICENSE) if necessary
+1. Clone the repository
 
-1. Modify [.pre-commit-config.yaml](.pre-commit-config.yaml) according to your need
+   ```Shell
+   git clone --recursive git@github.com:Robot-Learning-Course-Project/SAC-MPPI.git
+   ```
 
-1. Modify/add GitHub workflow status badges in [README.md](README.md)
+1. Create an environment, either using conda or virtualenv
+
+   1. Using conda
+
+      ```Shell
+      conda env create -f environment.yml
+      conda activate sac-mppi
+      pip install -e .
+      ```
+
+   1. Using virtualenv
+
+      ```Shell
+      python3 -m venv .venv
+      source .venv/bin/activate
+      pip install -e .
+      ```
+
+1. Run example:
+
+   ```Shell
+   sac-mppi -c ./config/default.yaml
+   ```
 
 ## Developer Quick Start
 
