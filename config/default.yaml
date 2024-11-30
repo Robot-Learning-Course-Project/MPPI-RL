@@ -1,4 +1,4 @@
 %YAML 1.2
 ---
 env_config: ./env/unitree_go_2_trot.yaml
-sac_config: ./sac/dummy_config.yaml
+sac_config: ./sac/default_sac.yaml

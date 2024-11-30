@@ -29,14 +29,17 @@ policy:
   # rnn_type: 'lstm'
   # rnn_hidden_size: 512
   # rnn_num_layers: 1
+
+# This is configurable from outside rsl_rl
 runner:
     num_steps_per_env: 24 # number of steps per environment per iteration
+    num_iter: 100
     max_iterations: 1500 # number of policy updates
     empirical_normalization: false
   # -- logging parameters
     save_interval: 50 # check for potential saves every `save_interval` iterations
-    experiment_name: walking_experiment
-    run_name: ''
+    experiment_name: unitree_go2_trot
+    run_name: sac-mppi
   # -- logging writer
     logger: tensorboard # tensorboard, neptune, wandb
     neptune_project: legged_gym
@@ -44,7 +47,7 @@ runner:
   # -- load and resuming
     resume: false
     load_run: -1 # -1 means load latest run
-    resume_path:    # updated from load_run and checkpoint
+    resume_path: # updated from load_run and checkpoint
     checkpoint: -1 # -1 means load latest checkpoint
 runner_class_name: OnPolicyRunner
 seed: 1

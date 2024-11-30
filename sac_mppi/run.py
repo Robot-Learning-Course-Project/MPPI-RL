@@ -28,6 +28,8 @@ def main():
     env = SACMPPIEnv(config["env_config"])
     runner = OnPolicyRunner(env, config["runner_config"])
 
+    runner.learn(num_learning_iterations=config["runner_config"]["runner"]["num_iter"])
+
 
 if __name__ == "__main__":
     main()
