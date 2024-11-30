@@ -211,6 +211,7 @@ dependencies:
       - gitpython==3.1.43
       - glfw==2.7.0
       - humanize==4.11.0
+      - imageio==2.5
       - importlib-resources==6.4.5
       - itsdangerous==2.2.0
       - jax==0.4.35
@@ -252,8 +253,6 @@ dependencies:
       - pytinyrenderer==0.0.14
       - pyyaml==6.0.2
       - rich==13.9.4
-      - rsl-rl==2.0.2
-      - sac-mppi==0.1.0
       - scienceplots==2.1.1
       - scipy==1.14.1
       - shtab==1.7.1

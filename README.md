@@ -15,8 +15,15 @@
    1. Using conda
 
       ```Shell
+      cd SAC-MPPI
       conda env create -f environment.yml
       conda activate sac-mppi
+      pip install -e .
+
+      cd sac_mppi/dial_mpc
+      pip install -e .
+
+      cd ../rsl_rl
       pip install -e .
       ```
 
