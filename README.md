@@ -1,4 +1,4 @@
-# New Repository
+# Soft Actor Critique Model Predictive Path Integral
 
 [![pre-commit](https://github.com/Robot-Learning-Course-Project/SAC-MPPI/actions/workflows/pre-commit.yml/badge.svg)](https://github.com/Robot-Learning-Course-Project/SAC-MPPI/actions/workflows/pre-commit.yml)
 
