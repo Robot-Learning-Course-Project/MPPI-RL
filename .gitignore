@@ -1,6 +1,12 @@
 # Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode,c++,python,jupyternotebooks,ros,ros2,matlab,git
 # Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,c++,python,jupyternotebooks,ros,ros2,matlab,git
 
+
+### RL LOgs
+
+logs/
+test/
+
 ### C++ ###
 # Prerequisites
 *.d
