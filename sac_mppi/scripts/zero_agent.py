@@ -1,6 +1,7 @@
+#!/usr/bin/env python3
 # SPDX-FileCopyrightText: Copyright (c) 2021 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # SPDX-License-Identifier: BSD-3-Clause
-# 
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
 #
@@ -27,41 +28,41 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 # Copyright (c) 2021 ETH Zurich, Nikita Rudin
-
-import numpy as np
 import os
 from datetime import datetime
+
+import dial_mpc.envs as dial_envs
+import jax
+import jax.numpy as jnp
+import numpy as np
+import torch
 import yaml
+from brax.io import html
+from dial_mpc.core.dial_config import DialConfig
+from dial_mpc.utils.io_utils import get_example_path
+from dial_mpc.utils.io_utils import load_dataclass_from_dict
+
+from sac_mppi.brax_rl.brax_env import UnitreeH1EnvRL
 
 # import isaacgym
 # from legged_gym.envs import *
 # from legged_gym.utils import get_args, task_registry
-import torch
-
-from sac_mppi.brax_rl.brax_env import UnitreeH1EnvRL
-import dial_mpc.envs as dial_envs
-from dial_mpc.core.dial_config import DialConfig
-from dial_mpc.utils.io_utils import get_example_path, load_dataclass_from_dict
-from brax.io import html
-import jax.numpy as jnp
-import jax
 
 
 def train():
     # config_dict = yaml.safe_load(open("/home/wenli/SAC-MPPI/sac_mppi/dial_mpc/dial_mpc/examples/unitree_go2_trot.yaml"))
 
-    
     env = UnitreeH1EnvRL()
     jit_reset = jax.jit(env.reset)
     jit_step = jax.jit(env.step)
 
     rng = jax.random.PRNGKey(0)
     state = jit_reset(rng)
-    
+
     rollout = []
-    
+
     zero_actions = jnp.zeros((env.num_actions))
-    
+
     for i in range(1000):
         pipeline_state = state.pipeline_state
         rollout.append(pipeline_state)
@@ -69,11 +70,11 @@ def train():
 
         state = jit_step(state, zero_actions)
         print("outer step", i)
-        print("inner step", state.info['step'])
+        print("inner step", state.info["step"])
         if state.done:
             act_rng, rng = jax.random.split(rng, 2)
             state = jit_reset(act_rng)
-    
+
     print("Processing rollout for visualization")
     import flask
 
@@ -85,7 +86,9 @@ def train():
     timestamp = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
     # save the html file
     with open(
-        os.path.join("/home/wenli/SAC-MPPI/sac_mppi/test", f"{timestamp}_brax_visualization.html"),
+        os.path.join(
+            "/home/wenli/SAC-MPPI/sac_mppi/test", f"{timestamp}_brax_visualization.html"
+        ),
         "w",
     ) as f:
         f.write(webpage)
@@ -108,7 +111,9 @@ def train():
         # xdata.append(infos[i]["xbar"][-1])
     data = jnp.array(data)
     # xdata = jnp.array(xdata)
-    jnp.save(os.path.join("/home/wenli/SAC-MPPI/sac_mppi/test", f"{timestamp}_states"), data)
+    jnp.save(
+        os.path.join("/home/wenli/SAC-MPPI/sac_mppi/test", f"{timestamp}_states"), data
+    )
     # jnp.save(os.path.join("/home/wenli/SAC-MPPI/sac_mppi/test", f"{timestamp}_predictions"), xdata)
 
     @app.route("/")
@@ -116,8 +121,9 @@ def train():
         return webpage
 
     app.run(port=5000)
-    
-if __name__ == '__main__':
+
+
+if __name__ == "__main__":
     # args = get_args()
     # train(args)
     train()

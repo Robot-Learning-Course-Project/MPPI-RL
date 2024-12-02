@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 #!/usr/bin/env python3
-
 import os
 
 SAC_MPPI_ROOT_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))

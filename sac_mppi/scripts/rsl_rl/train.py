@@ -1,6 +1,7 @@
+#!/usr/bin/env python3
 # SPDX-FileCopyrightText: Copyright (c) 2021 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # SPDX-License-Identifier: BSD-3-Clause
-# 
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
 #
@@ -27,42 +28,52 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 # Copyright (c) 2021 ETH Zurich, Nikita Rudin
-
-import numpy as np
 import os
 from datetime import datetime
+
+import dial_mpc.envs as dial_envs
+import numpy as np
 import yaml
+from dial_mpc.core.dial_config import DialConfig
+from dial_mpc.utils.io_utils import get_example_path
+from dial_mpc.utils.io_utils import load_dataclass_from_dict
+from rsl_rl.runners import OnPolicyRunner
+
+from sac_mppi import RL_LOG_DIR
+from sac_mppi import RSL_RL_ROOT_DIR
+from sac_mppi.brax_rl.brax_rsl_env import BraxRslGo2Env
 
 # import isaacgym
 # from legged_gym.envs import *
 # from legged_gym.utils import get_args, task_registry
 # import torch
 
-from sac_mppi import RL_LOG_DIR, RSL_RL_ROOT_DIR
-import dial_mpc.envs as dial_envs
-from dial_mpc.core.dial_config import DialConfig
-from dial_mpc.utils.io_utils import get_example_path, load_dataclass_from_dict
-from sac_mppi.brax_rl.brax_rsl_env import BraxRslGo2Env
-from rsl_rl.runners import OnPolicyRunner
 
 def train():
     # config_dict = yaml.safe_load(open("/home/wenli/SAC-MPPI/sac_mppi/dial_mpc/dial_mpc/examples/unitree_go2_trot.yaml"))
     log_root = os.path.join(RL_LOG_DIR, "brax_go2")
-    log_dir = os.path.join(log_root, datetime.now().strftime('%b%d_%H-%M-%S') + '_' + "test")
+    log_dir = os.path.join(
+        log_root, datetime.now().strftime("%b%d_%H-%M-%S") + "_" + "test"
+    )
 
-    
-    num_envs=4096
+    num_envs = 4096
     # num_envs=2
     env = BraxRslGo2Env(num_envs)
-    
-    train_config = yaml.safe_load(open(os.path.join(RSL_RL_ROOT_DIR, "config", "dummy_config.yaml")) )
+
+    train_config = yaml.safe_load(
+        open(os.path.join(RSL_RL_ROOT_DIR, "config", "dummy_config.yaml"))
+    )
     ppo_runner = OnPolicyRunner(env, train_config, log_dir, device="cuda:0")
-    
+
     # ppo_runner.load("/home/wenli/SAC-MPPI/sac_mppi/logs/test/Nov29_21-37-12_test/model_600.pt")
-    
-    ppo_runner.learn(num_learning_iterations=train_config['runner']['max_iterations'], init_at_random_ep_len=True)
-    
-if __name__ == '__main__':
+
+    ppo_runner.learn(
+        num_learning_iterations=train_config["runner"]["max_iterations"],
+        init_at_random_ep_len=True,
+    )
+
+
+if __name__ == "__main__":
     # args = get_args()
     # train(args)
     train()

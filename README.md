@@ -8,6 +8,7 @@
 
    ```Shell
    git clone --recursive git@github.com:Robot-Learning-Course-Project/SAC-MPPI.git
+   cd SAC-MPPI
    ```
 
 1. Create an environment, either using conda or virtualenv
@@ -15,25 +16,22 @@
    1. Using conda
 
       ```Shell
-      cd SAC-MPPI
       conda env create -f environment.yml
       conda activate sac-mppi
-      pip install -e .
-
-      cd sac_mppi/dial_mpc
-      pip install -e .
-
-      cd ../rsl_rl
-      pip install -e .
       ```
 
    1. Using virtualenv
 
       ```Shell
-      python3 -m venv .venv
+      python3.10 -m venv .venv
       source .venv/bin/activate
-      pip install -e .
       ```
+
+   Install packages
+
+   ```Shell
+   pip install -e . sac_mppi/dial_mpc sac_mppi/rsl_rl
+   ```
 
 1. Run example:
 
