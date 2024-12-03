@@ -30,7 +30,13 @@
    Install packages
 
    ```Shell
-   pip install -e . sac_mppi/dial_mpc sac_mppi/rsl_rl
+   pip install -e .
+
+   cd sac_mppi/dial_mpc
+   pip install -e .
+
+   cd sac_mppi/rsl_rl
+   pip install -e .
    ```
 
 1. Run example:

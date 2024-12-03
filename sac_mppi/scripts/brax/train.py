@@ -1,60 +1,61 @@
 #!/usr/bin/env python3
 # @title Import packages for plotting and creating graphics
+import functools
 import itertools
+import os
 import time
+from datetime import datetime
 from typing import Callable
 from typing import List
 from typing import NamedTuple
 from typing import Optional
 from typing import Union
 
-import matplotlib.pyplot as plt
-import numpy as np
-
-# More legible printing from numpy.
-np.set_printoptions(precision=3, suppress=True, linewidth=100)
-
-# @title Import MuJoCo, MJX, and Brax
-from datetime import datetime
-import functools
-import os
-
-
 import jax
-import numpy as np
-from flax.training import orbax_utils
-from flax import struct
-from matplotlib import pyplot as plt
+import jax.numpy as jnp
+import matplotlib.pyplot as plt
 import mediapy as media
-from orbax import checkpoint as ocp
-
 import mujoco
-from mujoco import mjx
-
+import numpy as np
 from brax import base
 from brax import envs
 from brax import math
-from brax.base import Base, Motion, Transform
+from brax.base import Base
+from brax.base import Motion
 from brax.base import State as PipelineState
-from brax.envs.base import Env, PipelineEnv, State
+from brax.base import System
+from brax.base import Transform
+from brax.envs.base import Env
+from brax.envs.base import PipelineEnv
+from brax.envs.base import State
+from brax.io import html
+from brax.io import mjcf
+from brax.io import model
 from brax.mjx.base import State as MjxState
-from brax.training.agents.ppo import train as ppo
 from brax.training.agents.ppo import networks as ppo_networks
-from brax.io import html, mjcf, model
+from brax.training.agents.ppo import train as ppo
+from dial_mpc.utils.io_utils import get_model_path
+from flax import struct
+from flax.training import orbax_utils
+from matplotlib import pyplot as plt
+from mujoco import mjx
+from orbax import checkpoint as ocp
 
-from sac_mppi import RL_LOG_DIR, RSL_RL_ROOT_DIR
-
+from sac_mppi import RL_LOG_DIR
+from sac_mppi import RSL_RL_ROOT_DIR
+from sac_mppi.brax_rl.brax_env import UnitreeGo2EnvRL
+from sac_mppi.brax_rl.brax_env import UnitreeH1EnvRL
+from sac_mppi.brax_rl.brax_utils import train
 from sac_mppi.dial_mpc.dial_mpc.envs.unitree_go2_env import UnitreeGo2Env
 from sac_mppi.dial_mpc.dial_mpc.envs.unitree_go2_env import UnitreeGo2EnvConfig
-from sac_mppi.dial_mpc.dial_mpc.utils.function_utils import (
-    global_to_body_velocity,
-    get_foot_step,
-)
-import jax.numpy as jnp
-from dial_mpc.utils.io_utils import get_model_path
-from brax.base import System
-from sac_mppi.brax_rl.brax_env import UnitreeGo2EnvRL, UnitreeH1EnvRL
-from sac_mppi.brax_rl.brax_utils import train
+from sac_mppi.dial_mpc.dial_mpc.utils.function_utils import get_foot_step
+from sac_mppi.dial_mpc.dial_mpc.utils.function_utils import global_to_body_velocity
+
+# @title Import MuJoCo, MJX, and Brax
+
+
+# More legible printing from numpy.
+np.set_printoptions(precision=3, suppress=True, linewidth=100)
 
 log_root = os.path.join(RL_LOG_DIR, "brax_go2")
 log_dir = os.path.join(
