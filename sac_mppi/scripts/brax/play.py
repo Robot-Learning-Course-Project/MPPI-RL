@@ -62,7 +62,7 @@ if not os.path.exists(visualization_dir):
 
 def train():
 
-    env = UnitreeGo2EnvRL()
+    env = UnitreeGo2EnvRL(deploy=True)
     # env = UnitreeGo2DialEnvRL()
     # env = UnitreeH1EnvRL()
     jit_reset = jax.jit(env.reset)
@@ -78,6 +78,8 @@ def train():
         ppo_networks.make_ppo_networks, policy_hidden_layer_sizes=(512, 256, 128)
     )
 
+
+    print(f"obs shape: {state.obs.shape}, action size: {env.action_size}")
     ppo_network = make_networks_factory(
         state.obs.shape[-1],
         env.action_size,
@@ -85,14 +87,12 @@ def train():
     )
     make_inference_fn = brax_utils.make_inference_fn(ppo_network)
     make_value_inference_fn = brax_utils.make_value_inference_fn(ppo_network)
+  
+    
 
-    model_path = (
-        "/home/wenli/SAC-MPPI/sac_mppi/logs/brax_go2/Dec01_01-20-11_walk/go2_policy"
-    )
-    value_model_path = (
-        "/home/wenli/SAC-MPPI/sac_mppi/logs/brax_go2/Dec01_01-20-11_walk/go2_value"
-    )
-
+    model_path = '/home/wenli/SAC-MPPI/sac_mppi/logs/brax_go2/Dec02_14-52-19_walk/go2_policy'
+    value_model_path = '/home/wenli/SAC-MPPI/sac_mppi/logs/brax_go2/Dec02_14-52-19_walk/go2_value'
+    
     params = model.load_params(model_path)
     value_params = model.load_params(value_model_path)
     inference_fn = make_inference_fn(params)
@@ -114,10 +114,10 @@ def train():
         state = jit_step(state, ctrl)
         # print("outer step", i)
         # print("inner step", state.info['step'])
-        if state.done:
-            act_rng, rng = jax.random.split(rng, 2)
-            state = jit_reset(act_rng)
-
+        # if state.done:
+        #     act_rng, rng = jax.random.split(rng, 2)
+        #     state = jit_reset(act_rng)
+            
     print("Processing rollout for visualization")
     import flask
 
