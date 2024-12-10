@@ -45,6 +45,31 @@
    sac-mppi -c ./config/default.yaml
    ```
 
+## Run our method
+
+1. train an RL policy
+
+```
+cd sac_mppi/
+python scripts/brax/train.py
+```
+
+1. visualize the RL policy
+
+copy model path `logs/.../policy_stepxxx` to `play.py`
+```
+python scripts/brax/play.py
+```
+
+1. Run our method
+
+copy model relative path `brax_go2/.../value_stepxxx` to `sac_mppi/dial_mpc/dial_mpc/examples/unitree_go2_trot_hybrid.yaml`
+```
+python sac_mppi/dial_mpc/dial_mpc/core/dial_custom_hybrid.py --example unitree_go2_trot_hybrid
+```
+
+
 ## Developer Quick Start
 
 - Run [scripts/dev-setup.sh](scripts/dev-setup.sh) to setup the development environment
+

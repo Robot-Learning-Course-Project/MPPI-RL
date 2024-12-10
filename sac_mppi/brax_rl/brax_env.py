@@ -426,7 +426,8 @@ class UnitreeGo2EnvRL(PipelineEnv):
         # done |= state.info['step'] > 1000
 
         # reward
-        rewards = {
+        rewards = {k:0.0 for k in self.reward_config.rewards.scales.keys()}
+        rewards.update({
             'tracking_lin_vel': (
                 self._reward_tracking_lin_vel(state.info['command'], x, xd)
             ),
@@ -447,9 +448,8 @@ class UnitreeGo2EnvRL(PipelineEnv):
                 state.info['command'],
             ),
             'foot_slip': self._reward_foot_slip(pipeline_state, contact_filt_cm),
-            'termination': self._reward_termination(done, state.info['step']),
-            
-        }
+            'termination': self._reward_termination(done, state.info['step']),  
+        })
 
         if self.deploy:
             rewards.update({
