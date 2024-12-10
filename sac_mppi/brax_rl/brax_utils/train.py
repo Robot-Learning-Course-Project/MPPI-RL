@@ -505,8 +505,9 @@ def train(
             )
             logging.info(metrics)
             progress_fn(current_step, metrics)
-            params = _unpmap((training_state.normalizer_params, training_state.params))
-            policy_params_fn(current_step, make_policy, params)
+            params = _unpmap((training_state.normalizer_params, training_state.params.policy))
+            value_params = _unpmap((training_state.normalizer_params, training_state.params.value))
+            policy_params_fn(current_step, params, value_params)
 
     total_steps = current_step
     assert total_steps >= num_timesteps

@@ -57,7 +57,7 @@ from sac_mppi.dial_mpc.dial_mpc.utils.function_utils import global_to_body_veloc
 # More legible printing from numpy.
 np.set_printoptions(precision=3, suppress=True, linewidth=100)
 
-log_root = os.path.join(RL_LOG_DIR, "brax_go2")
+log_root = os.path.join(RL_LOG_DIR, "brax_go2", "ppo")
 log_dir = os.path.join(
     log_root, datetime.now().strftime("%b%d_%H-%M-%S") + "_" + "walk"
 )
@@ -65,8 +65,13 @@ log_dir = os.path.join(
 if not os.path.exists(log_dir):
     os.makedirs(log_dir)
 
+print(f"Saving logs to {log_dir}")
+
 env = UnitreeGo2EnvRL()
+print("Running Go2 Env")
 # env = UnitreeH1EnvRL()
+# print("Running H1 Env")
+
 sys = env.sys
 # define the jit reset/step functions
 jit_reset = jax.jit(env.reset)
@@ -75,14 +80,25 @@ jit_step = jax.jit(env.step)
 state = jit_reset(jax.random.PRNGKey(0))
 rollout = [state.pipeline_state]
 
+
+def policy_params_fn(current_step, params, value_params):
+    # save checkpoints
+    policy_model_path = f"{log_dir}/policy_step{current_step}"
+    value_model_path = f"{log_dir}/value_step{current_step}"
+   
+    model.save_params(policy_model_path, params)
+    model.save_params(value_model_path, value_params)
+
+
 make_networks_factory = functools.partial(
     ppo_networks.make_ppo_networks, policy_hidden_layer_sizes=(512, 256, 128)
 )
+print('initialized network')
 
 train_fn = functools.partial(
     train,
-    num_timesteps=100_000_000,
-    num_evals=10,
+    num_timesteps=100_000_000,#100_000_000
+    num_evals=10,#10
     reward_scaling=1.0,
     episode_length=1000,
     normalize_observations=True,
@@ -98,9 +114,10 @@ train_fn = functools.partial(
     seed=0,
     network_factory=make_networks_factory,
     # randomization_fn=domain_randomize,
+    policy_params_fn=policy_params_fn
 )
 
-
+print('set training params')
 x_data = []
 y_data = []
 ydataerr = []
@@ -120,18 +137,17 @@ def progress(num_steps, metrics):
     )
 
 
-#   plt.xlim([0, train_fn.keywords['num_timesteps'] * 1.25])
-#   # plt.ylim([min_y, max_y])
+    plt.xlim([0, train_fn.keywords['num_timesteps'] * 1.25])
+    # plt.ylim([min_y, max_y])
 
-#   plt.xlabel('# environment steps')
-#   plt.ylabel('reward per episode')
-#   plt.title(f'y={y_data[-1]:.3f}')
+    plt.xlabel('# environment steps')
+    plt.ylabel('reward per episode')
+    plt.title(f'y={y_data[-1]:.3f}')
 
-#   plt.errorbar(
-#       x_data, y_data, yerr=ydataerr)
-#   plt.show()
+    plt.errorbar(x_data, y_data, yerr=ydataerr)
+    plt.savefig(f"{log_dir}/{num_steps}.png")
 
-make_inference_fn, params, value_params, _ = train_fn(
+make_inference_fn, params, value_params, metrics = train_fn(
     environment=env, progress_fn=progress
 )
 
@@ -140,8 +156,8 @@ print(f"time to train: {times[-1] - times[1]}")
 
 
 # @title Save Model
-policy_model_path = os.path.join(log_dir, "go2_policy")
-value_model_path = os.path.join(log_dir, "go2_value")
+policy_model_path = os.path.join(log_dir, "policy_final")
+value_model_path = os.path.join(log_dir, "value_final")
 model.save_params(policy_model_path, params)
 model.save_params(value_model_path, value_params)
 
