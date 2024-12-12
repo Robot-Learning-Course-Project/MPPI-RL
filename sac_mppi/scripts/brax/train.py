@@ -85,7 +85,7 @@ def policy_params_fn(current_step, params, value_params):
     # save checkpoints
     policy_model_path = f"{log_dir}/policy_step{current_step}"
     value_model_path = f"{log_dir}/value_step{current_step}"
-   
+
     model.save_params(policy_model_path, params)
     model.save_params(value_model_path, value_params)
 
@@ -93,12 +93,12 @@ def policy_params_fn(current_step, params, value_params):
 make_networks_factory = functools.partial(
     ppo_networks.make_ppo_networks, policy_hidden_layer_sizes=(512, 256, 128)
 )
-print('initialized network')
+print("initialized network")
 
 train_fn = functools.partial(
     train,
-    num_timesteps=100_000_000,#100_000_000
-    num_evals=10,#10
+    num_timesteps=100_000_000,  # 100_000_000
+    num_evals=10,  # 10
     reward_scaling=1.0,
     episode_length=1000,
     normalize_observations=True,
@@ -114,10 +114,10 @@ train_fn = functools.partial(
     seed=0,
     network_factory=make_networks_factory,
     # randomization_fn=domain_randomize,
-    policy_params_fn=policy_params_fn
+    policy_params_fn=policy_params_fn,
 )
 
-print('set training params')
+print("set training params")
 x_data = []
 y_data = []
 ydataerr = []
@@ -136,16 +136,16 @@ def progress(num_steps, metrics):
         f'step: {num_steps}, reward: {metrics["eval/episode_reward"]:.3f}, time: {times[-1] - times[0]}'
     )
 
-
-    plt.xlim([0, train_fn.keywords['num_timesteps'] * 1.25])
+    plt.xlim([0, train_fn.keywords["num_timesteps"] * 1.25])
     # plt.ylim([min_y, max_y])
 
-    plt.xlabel('# environment steps')
-    plt.ylabel('reward per episode')
-    plt.title(f'y={y_data[-1]:.3f}')
+    plt.xlabel("# environment steps")
+    plt.ylabel("reward per episode")
+    plt.title(f"y={y_data[-1]:.3f}")
 
     plt.errorbar(x_data, y_data, yerr=ydataerr)
     plt.savefig(f"{log_dir}/{num_steps}.png")
+
 
 make_inference_fn, params, value_params, metrics = train_fn(
     environment=env, progress_fn=progress

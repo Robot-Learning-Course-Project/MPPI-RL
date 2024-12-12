@@ -32,8 +32,8 @@ from brax.io import html
 from brax.io import mjcf
 from brax.io import model
 from brax.mjx.base import State as MjxState
-from brax.training.agents.sac import train as sac
 from brax.training.agents.sac import networks as sac_networks
+from brax.training.agents.sac import train as sac
 from dial_mpc.utils.io_utils import get_model_path
 from flax import struct
 from flax.training import orbax_utils
@@ -80,49 +80,50 @@ jit_step = jax.jit(env.step)
 state = jit_reset(jax.random.PRNGKey(0))
 rollout = [state.pipeline_state]
 
+
 def policy_params_fn(current_step, params, value_params):
     # save checkpoints
     policy_model_path = f"{log_dir}/policy_step{current_step}"
     value_model_path = f"{log_dir}/value_step{current_step}"
-   
+
     model.save_params(policy_model_path, params)
     model.save_params(value_model_path, value_params)
 
 
 make_networks_factory = functools.partial(
-    sac_networks.make_sac_networks, 
-    hidden_layer_sizes = (512, 256, 128),
+    sac_networks.make_sac_networks,
+    hidden_layer_sizes=(512, 256, 128),
     # activation = linen.relu,
     # policy_network_layer_norm = False,
     # q_network_layer_norm = False,
 )
-print('initialized network')
+print("initialized network")
 
 train_fn = functools.partial(
-    train,                          #sac.train,
-    num_timesteps=100_000,             # 10_000_000
-    num_evals=10,                         
-    reward_scaling=1.0,                   
-    episode_length=1000,                  
-    normalize_observations=True,          
-    action_repeat=1,                      
-    num_envs=128,                         # Fewer parallel environments
-    num_eval_envs=128,                    
-    learning_rate=1e-4,                   # Smaller lr
-    discounting=0.99,                     # Higher discount factor
-    batch_size=256,                       
-    seed=0,                               
-    tau=0.005,                            # Target network update rate
-    min_replay_size=10_000,               # Minimum replay buffer size before training
-    max_replay_size=1_000_000,            # Maximum replay buffer size
-    grad_updates_per_step=1,              
+    train,  # sac.train,
+    num_timesteps=100_000,  # 10_000_000
+    num_evals=10,
+    reward_scaling=1.0,
+    episode_length=1000,
+    normalize_observations=True,
+    action_repeat=1,
+    num_envs=128,  # Fewer parallel environments
+    num_eval_envs=128,
+    learning_rate=1e-4,  # Smaller lr
+    discounting=0.99,  # Higher discount factor
+    batch_size=256,
+    seed=0,
+    tau=0.005,  # Target network update rate
+    min_replay_size=10_000,  # Minimum replay buffer size before training
+    max_replay_size=1_000_000,  # Maximum replay buffer size
+    grad_updates_per_step=1,
     # deterministic_eval=False,             # Non-deterministic evaluation for SAC
-    network_factory=make_networks_factory, # Factory for SAC networks
-    randomization_fn=None,                # Placeholder for domain randomization
-    checkpoint_logdir=log_dir
+    network_factory=make_networks_factory,  # Factory for SAC networks
+    randomization_fn=None,  # Placeholder for domain randomization
+    checkpoint_logdir=log_dir,
 )
 
-print('set training params')
+print("set training params")
 
 x_data = []
 y_data = []
@@ -142,13 +143,12 @@ def progress(num_steps, metrics):
         f'step: {num_steps}, reward: {metrics["eval/episode_reward"]:.3f}, time: {times[-1] - times[0]}'
     )
 
-
-    plt.xlim([0, train_fn.keywords['num_timesteps'] * 1.25])
+    plt.xlim([0, train_fn.keywords["num_timesteps"] * 1.25])
     # plt.ylim([min_y, max_y])
 
-    plt.xlabel('# environment steps')
-    plt.ylabel('reward per episode')
-    plt.title(f'y={y_data[-1]:.3f}')
+    plt.xlabel("# environment steps")
+    plt.ylabel("reward per episode")
+    plt.title(f"y={y_data[-1]:.3f}")
 
     plt.errorbar(x_data, y_data, yerr=ydataerr)
     plt.savefig(f"{log_dir}/{num_steps}.png")

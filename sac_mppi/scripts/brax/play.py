@@ -87,9 +87,7 @@ def train():
     make_inference_fn = brax_utils.make_inference_fn(ppo_network)
     make_value_inference_fn = brax_utils.make_value_inference_fn(ppo_network)
 
-    model_path = (
-        "/home/wenli/SAC-MPPI/sac_mppi/logs/brax_go2/ppo/Dec10_13-18-53_walk/policy_step100270080"
-    )
+    model_path = "/home/wenli/SAC-MPPI/sac_mppi/logs/brax_go2/ppo/Dec10_13-18-53_walk/policy_step100270080"
     value_model_path = (
         "/home/wenli/SAC-MPPI/sac_mppi/logs/brax_go2/Dec02_14-52-19_walk/go2_value"
     )
