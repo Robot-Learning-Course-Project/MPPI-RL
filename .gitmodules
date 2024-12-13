@@ -1,4 +1,4 @@
-[submodule "sac_mppi/dial_mpc"]
-	path = sac_mppi/dial_mpc
+[submodule "mppi_rl/dial_mpc"]
+	path = mppi_rl/dial_mpc
 	url = https://github.com/Robot-Learning-Course-Project/dial-mpc.git
 	branch = main

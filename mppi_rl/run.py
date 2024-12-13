@@ -9,10 +9,10 @@
 #
 import argparse
 
-from sac_mppi.rsl_rl.rsl_rl.runners.on_policy_runner import OnPolicyRunner
-from sac_mppi.sac.sac_mppi_env import SACMPPIEnv
-from sac_mppi.utils.files import print_dict
-from sac_mppi.utils.files import read_file
+from mppi_rl.rl.mppi_rl_env import SACMPPIEnv
+from mppi_rl.rsl_rl.rsl_rl.runners.on_policy_runner import OnPolicyRunner
+from mppi_rl.utils.files import print_dict
+from mppi_rl.utils.files import read_file
 
 
 def main():

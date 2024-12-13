@@ -41,21 +41,22 @@ from matplotlib import pyplot as plt
 from mujoco import mjx
 from orbax import checkpoint as ocp
 
-from sac_mppi import RL_LOG_DIR
-from sac_mppi import RSL_RL_ROOT_DIR
-from sac_mppi.brax_rl.brax_env import UnitreeGo2EnvRL
-from sac_mppi.brax_rl.brax_env import UnitreeH1EnvRL
-from sac_mppi.brax_rl.brax_utils import train
-from sac_mppi.dial_mpc.dial_mpc.envs.unitree_go2_env import UnitreeGo2Env
-from sac_mppi.dial_mpc.dial_mpc.envs.unitree_go2_env import UnitreeGo2EnvConfig
-from sac_mppi.dial_mpc.dial_mpc.utils.function_utils import get_foot_step
-from sac_mppi.dial_mpc.dial_mpc.utils.function_utils import global_to_body_velocity
+from mppi_rl import RL_LOG_DIR
+from mppi_rl import RSL_RL_ROOT_DIR
+from mppi_rl.brax_rl.brax_env import UnitreeGo2EnvRL
+from mppi_rl.brax_rl.brax_env import UnitreeH1EnvRL
+from mppi_rl.brax_rl.brax_utils import train
+from mppi_rl.dial_mpc.dial_mpc.envs.unitree_go2_env import UnitreeGo2Env
+from mppi_rl.dial_mpc.dial_mpc.envs.unitree_go2_env import UnitreeGo2EnvConfig
+from mppi_rl.dial_mpc.dial_mpc.utils.function_utils import get_foot_step
+from mppi_rl.dial_mpc.dial_mpc.utils.function_utils import global_to_body_velocity
 
 # @title Import MuJoCo, MJX, and Brax
 
 
 # More legible printing from numpy.
 np.set_printoptions(precision=3, suppress=True, linewidth=100)
+
 
 def main():
     log_root = os.path.join(RL_LOG_DIR, "brax_go2", "ppo")
@@ -81,7 +82,6 @@ def main():
     state = jit_reset(jax.random.PRNGKey(0))
     rollout = [state.pipeline_state]
 
-
     def policy_params_fn(current_step, params, value_params):
         # save checkpoints
         policy_model_path = f"{log_dir}/policy_step{current_step}"
@@ -89,7 +89,6 @@ def main():
 
         model.save_params(policy_model_path, params)
         model.save_params(value_model_path, value_params)
-
 
     make_networks_factory = functools.partial(
         ppo_networks.make_ppo_networks, policy_hidden_layer_sizes=(512, 256, 128)
@@ -126,7 +125,6 @@ def main():
 
     max_y, min_y = 13000, 0
 
-
     def progress(num_steps, metrics):
         times.append(datetime.now())
         x_data.append(num_steps)
@@ -147,7 +145,6 @@ def main():
         plt.errorbar(x_data, y_data, yerr=ydataerr)
         plt.savefig(f"{log_dir}/{num_steps}.png")
 
-
     make_inference_fn, params, value_params, metrics = train_fn(
         environment=env, progress_fn=progress
     )
@@ -163,6 +160,7 @@ def main():
 
     print(f"Saved policy model to {policy_model_path}")
     print(f"Saved value model to {value_model_path}")
+
 
 if __name__ == "__main__":
     main()

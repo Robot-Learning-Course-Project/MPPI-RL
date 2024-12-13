@@ -3,7 +3,7 @@ requires = ["setuptools>=64", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "sac_mppi"
+name = "mppi_rl"
 version = "0.1.0"
 description = "MPPI with RL baseline, CMU robot learning course project"
 readme = "README.md"
@@ -38,7 +38,7 @@ dependencies = [
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["sac_mppi", "sac_mppi.*"]
+include = ["mppi_rl", "mppi_rl.*"]
 
 [project.scripts]
-train = "sac_mppi.scripts.brax.train:main"
+train = "mppi_rl.scripts.brax.train:main"

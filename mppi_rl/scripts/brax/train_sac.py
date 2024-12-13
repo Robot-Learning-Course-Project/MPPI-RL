@@ -41,15 +41,15 @@ from matplotlib import pyplot as plt
 from mujoco import mjx
 from orbax import checkpoint as ocp
 
-from sac_mppi import RL_LOG_DIR
-from sac_mppi import RSL_RL_ROOT_DIR
-from sac_mppi.brax_rl.brax_env import UnitreeGo2EnvRL
-from sac_mppi.brax_rl.brax_env import UnitreeH1EnvRL
-from sac_mppi.brax_rl.brax_utils.train_sac import train
-from sac_mppi.dial_mpc.dial_mpc.envs.unitree_go2_env import UnitreeGo2Env
-from sac_mppi.dial_mpc.dial_mpc.envs.unitree_go2_env import UnitreeGo2EnvConfig
-from sac_mppi.dial_mpc.dial_mpc.utils.function_utils import get_foot_step
-from sac_mppi.dial_mpc.dial_mpc.utils.function_utils import global_to_body_velocity
+from mppi_rl import RL_LOG_DIR
+from mppi_rl import RSL_RL_ROOT_DIR
+from mppi_rl.brax_rl.brax_env import UnitreeGo2EnvRL
+from mppi_rl.brax_rl.brax_env import UnitreeH1EnvRL
+from mppi_rl.brax_rl.brax_utils.train_sac import train
+from mppi_rl.dial_mpc.dial_mpc.envs.unitree_go2_env import UnitreeGo2Env
+from mppi_rl.dial_mpc.dial_mpc.envs.unitree_go2_env import UnitreeGo2EnvConfig
+from mppi_rl.dial_mpc.dial_mpc.utils.function_utils import get_foot_step
+from mppi_rl.dial_mpc.dial_mpc.utils.function_utils import global_to_body_velocity
 
 # @title Import MuJoCo, MJX, and Brax
 

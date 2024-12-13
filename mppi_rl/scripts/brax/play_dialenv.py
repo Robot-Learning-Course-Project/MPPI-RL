@@ -44,9 +44,9 @@ from brax.training.acme import running_statistics
 from brax.training.agents.ppo import networks as ppo_networks
 from brax.training.agents.ppo import train as ppo
 
-from sac_mppi import RL_LOG_DIR
-from sac_mppi.brax_rl import brax_utils
-from sac_mppi.brax_rl.brax_env import UnitreeGo2DialEnvRL
+from mppi_rl import RL_LOG_DIR
+from mppi_rl.brax_rl import brax_utils
+from mppi_rl.brax_rl.brax_env import UnitreeGo2DialEnvRL
 
 # import isaacgym
 # from legged_gym.envs import *
@@ -84,10 +84,10 @@ def train():
     make_value_inference_fn = brax_utils.make_value_inference_fn(ppo_network)
 
     model_path = (
-        "/home/wenli/SAC-MPPI/sac_mppi/logs/brax_go2/Dec01_01-20-11_walk/go2_policy"
+        "/home/wenli/MPPI-RL/mppi_rl/logs/brax_go2/Dec01_01-20-11_walk/go2_policy"
     )
     value_model_path = (
-        "/home/wenli/SAC-MPPI/sac_mppi/logs/brax_go2/Dec01_01-20-11_walk/go2_value"
+        "/home/wenli/MPPI-RL/mppi_rl/logs/brax_go2/Dec01_01-20-11_walk/go2_value"
     )
 
     params = model.load_params(model_path)

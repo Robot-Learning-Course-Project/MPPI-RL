@@ -17,8 +17,8 @@ from brax import base
 from jax._src.dlpack import from_dlpack
 from jax._src.dlpack import to_dlpack
 
-from sac_mppi.brax_rl.brax_env import UnitreeGo2EnvRL
-from sac_mppi.rsl_rl.rsl_rl.env.vec_env import VecEnv
+from mppi_rl.brax_rl.brax_env import UnitreeGo2EnvRL
+from mppi_rl.rsl_rl.rsl_rl.env.vec_env import VecEnv
 
 
 def jax_to_torch(tensor: jax.Array) -> torch.Tensor:

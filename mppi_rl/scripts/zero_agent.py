@@ -28,94 +28,52 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 # Copyright (c) 2021 ETH Zurich, Nikita Rudin
-import functools
 import os
 from datetime import datetime
 
+import dial_mpc.envs as dial_envs
 import jax
 import jax.numpy as jnp
 import numpy as np
 import torch
 import yaml
 from brax.io import html
-from brax.io import mjcf
-from brax.io import model
-from brax.training.acme import running_statistics
-from brax.training.agents.ppo import networks as ppo_networks
-from brax.training.agents.ppo import train as ppo
+from dial_mpc.core.dial_config import DialConfig
+from dial_mpc.utils.io_utils import get_example_path
+from dial_mpc.utils.io_utils import load_dataclass_from_dict
 
-from sac_mppi import RL_LOG_DIR
-from sac_mppi.brax_rl import brax_utils
-from sac_mppi.brax_rl.brax_env import UnitreeGo2DialEnvRL
-from sac_mppi.brax_rl.brax_env import UnitreeGo2EnvRL
-from sac_mppi.brax_rl.brax_env import UnitreeH1EnvRL
+from mppi_rl.brax_rl.brax_env import UnitreeH1EnvRL
 
 # import isaacgym
 # from legged_gym.envs import *
 # from legged_gym.utils import get_args, task_registry
 
-visualization_dir = os.path.join(RL_LOG_DIR, "visualization")
-
-if not os.path.exists(visualization_dir):
-    os.makedirs(visualization_dir)
-
 
 def train():
+    # config_dict = yaml.safe_load(open("/home/wenli/MPPI-RL/mppi_rl/dial_mpc/dial_mpc/examples/unitree_go2_trot.yaml"))
 
-    env = UnitreeGo2EnvRL(deploy=True)
-    # env = UnitreeGo2DialEnvRL()
-    # env = UnitreeH1EnvRL()
+    env = UnitreeH1EnvRL()
     jit_reset = jax.jit(env.reset)
     jit_step = jax.jit(env.step)
+
     rng = jax.random.PRNGKey(0)
     state = jit_reset(rng)
 
     rollout = []
 
-    print("env")
-
-    make_networks_factory = functools.partial(
-        ppo_networks.make_ppo_networks, policy_hidden_layer_sizes=(512, 256, 128)
-    )
-
-    print(f"obs shape: {state.obs.shape}, action size: {env.action_size}")
-    ppo_network = make_networks_factory(
-        state.obs.shape[-1],
-        env.action_size,
-        preprocess_observations_fn=running_statistics.normalize,
-    )
-    make_inference_fn = brax_utils.make_inference_fn(ppo_network)
-    make_value_inference_fn = brax_utils.make_value_inference_fn(ppo_network)
-
-    model_path = "/home/wenli/SAC-MPPI/sac_mppi/logs/brax_go2/ppo/Dec10_13-18-53_walk/policy_step100270080"
-    value_model_path = (
-        "/home/wenli/SAC-MPPI/sac_mppi/logs/brax_go2/Dec02_14-52-19_walk/go2_value"
-    )
-
-    params = model.load_params(model_path)
-    value_params = model.load_params(value_model_path)
-    inference_fn = make_inference_fn(params)
-    value_inference_fn = make_value_inference_fn(value_params)
-    jit_inference_fn = jax.jit(inference_fn)
-    jit_value_inference_fn = jax.jit(value_inference_fn)
+    zero_actions = jnp.zeros((env.num_actions))
 
     for i in range(1000):
         pipeline_state = state.pipeline_state
         rollout.append(pipeline_state)
-
         act_rng, rng = jax.random.split(rng)
-        ctrl, _ = jit_inference_fn(state.obs, act_rng)
 
-        act_rng, rng = jax.random.split(rng)
-        value, _ = jit_value_inference_fn(state.obs, act_rng)
-        print("value", value)
-
-        state = jit_step(state, ctrl)
-        # print("outer step", i)
-        # print("inner step", state.info['step'])
-        # if state.done:
-        #     act_rng, rng = jax.random.split(rng, 2)
-        #     state = jit_reset(act_rng)
+        state = jit_step(state, zero_actions)
+        print("outer step", i)
+        print("inner step", state.info["step"])
+        if state.done:
+            act_rng, rng = jax.random.split(rng, 2)
+            state = jit_reset(act_rng)
 
     print("Processing rollout for visualization")
     import flask
@@ -129,7 +87,7 @@ def train():
     # save the html file
     with open(
         os.path.join(
-            RL_LOG_DIR, "visualization", f"{timestamp}_brax_visualization.html"
+            "/home/wenli/MPPI-RL/mppi_rl/test", f"{timestamp}_brax_visualization.html"
         ),
         "w",
     ) as f:
@@ -153,7 +111,10 @@ def train():
         # xdata.append(infos[i]["xbar"][-1])
     data = jnp.array(data)
     # xdata = jnp.array(xdata)
-    jnp.save(os.path.join(RL_LOG_DIR, "visualization", f"{timestamp}_states"), data)
+    jnp.save(
+        os.path.join("/home/wenli/MPPI-RL/mppi_rl/test", f"{timestamp}_states"), data
+    )
+    # jnp.save(os.path.join("/home/wenli/MPPI-RL/mppi_rl/test", f"{timestamp}_predictions"), xdata)
 
     @app.route("/")
     def index():

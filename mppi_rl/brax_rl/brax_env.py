@@ -36,9 +36,9 @@ from dial_mpc.utils.io_utils import get_model_path
 from jax import numpy as jp
 from ml_collections import config_dict
 
-import sac_mppi.dial_mpc.dial_mpc.envs.unitree_go2_env as dial_envs
-from sac_mppi import RL_LOG_DIR
-from sac_mppi.brax_rl import brax_utils
+import mppi_rl.dial_mpc.dial_mpc.envs.unitree_go2_env as dial_envs
+from mppi_rl import RL_LOG_DIR
+from mppi_rl.brax_rl import brax_utils
 
 
 def get_config():

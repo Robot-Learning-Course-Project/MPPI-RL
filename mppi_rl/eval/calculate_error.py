@@ -10,7 +10,7 @@ parser.add_argument(
 args = parser.parse_args()
 
 # Load observations
-# observations_dir = "/home/zhixuan/16831/project/SAC-MPPI/unitree_h1_jog/20241202-192906_observations.npy"
+# observations_dir = "/home/zhixuan/16831/project/MPPI-RL/unitree_h1_jog/20241202-192906_observations.npy"
 observations_dir = args.observation_dir
 observations = jnp.load(observations_dir)
 

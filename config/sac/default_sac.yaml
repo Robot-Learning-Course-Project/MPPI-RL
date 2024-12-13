@@ -39,7 +39,7 @@ runner:
   # -- logging parameters
     save_interval: 50 # check for potential saves every `save_interval` iterations
     experiment_name: unitree_go2_trot
-    run_name: sac-mppi
+    run_name: mppi-rl
   # -- logging writer
     logger: tensorboard # tensorboard, neptune, wandb
     neptune_project: legged_gym

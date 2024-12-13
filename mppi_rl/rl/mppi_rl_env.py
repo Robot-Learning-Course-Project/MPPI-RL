@@ -11,9 +11,9 @@ import jax
 import jax.numpy as jnp
 import torch
 
-from sac_mppi.dial_mpc.dial_mpc.envs.unitree_go2_env import UnitreeGo2Env
-from sac_mppi.dial_mpc.dial_mpc.envs.unitree_go2_env import UnitreeGo2EnvConfig
-from sac_mppi.rsl_rl.rsl_rl.env.vec_env import VecEnv
+from mppi_rl.dial_mpc.dial_mpc.envs.unitree_go2_env import UnitreeGo2Env
+from mppi_rl.dial_mpc.dial_mpc.envs.unitree_go2_env import UnitreeGo2EnvConfig
+from mppi_rl.rsl_rl.rsl_rl.env.vec_env import VecEnv
 
 
 class SACMPPIEnv(VecEnv):
