@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "sac_mppi"
 version = "0.1.0"
-description = "MPPI with SAC baseline, CMU robot learning course project"
+description = "MPPI with RL baseline, CMU robot learning course project"
 readme = "README.md"
 requires-python = ">=3.10"
 license = { file = "LICENSE" }
@@ -19,6 +19,7 @@ dependencies = [
     "jax-cosmo",
     "jax[cuda12]",
     "matplotlib",
+    "mediapy",
     "mujoco",
     "numpy<2.0.0",
     "numpy>=1.16.4",
@@ -40,4 +41,4 @@ where = ["."]
 include = ["sac_mppi", "sac_mppi.*"]
 
 [project.scripts]
-sac_mppi = "sac_mppi.run:main"
+train = "sac_mppi.scripts.brax.train:main"

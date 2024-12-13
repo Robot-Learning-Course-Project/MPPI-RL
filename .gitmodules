@@ -2,7 +2,3 @@
 	path = sac_mppi/dial_mpc
 	url = https://github.com/Robot-Learning-Course-Project/dial-mpc.git
 	branch = main
-[submodule "sac_mppi/rsl_rl"]
-	path = sac_mppi/rsl_rl
-	url = https://github.com/Robot-Learning-Course-Project/rsl_rl.git
-	branch = master

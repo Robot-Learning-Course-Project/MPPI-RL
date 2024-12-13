@@ -1,4 +1,4 @@
-# Soft Actor Critique Model Predictive Path Integral
+# Model Predictive Path Integral + Reinforcement Learning
 
 [![pre-commit](https://github.com/Robot-Learning-Course-Project/SAC-MPPI/actions/workflows/pre-commit.yml/badge.svg)](https://github.com/Robot-Learning-Course-Project/SAC-MPPI/actions/workflows/pre-commit.yml)
 
@@ -34,9 +34,6 @@
 
    cd sac_mppi/dial_mpc
    pip install -e .
-
-   cd sac_mppi/rsl_rl
-   pip install -e .
    ```
 
 ## Run our method
@@ -44,9 +41,7 @@
 1. train an RL policy
 
 ```Shell
-git checkout dev/ppo_mppi
-cd sac_mppi/
-python scripts/brax/train.py
+sac_mppi/scripts/brax/train.py
 ```
 
 1. visualize the RL policy
@@ -54,7 +49,7 @@ python scripts/brax/train.py
 copy model path `logs/.../policy_stepxxx` to `play.py`
 
 ```Shell
-python scripts/brax/play.py
+sac_mppi/scripts/brax/play.py
 ```
 
 1. Run our method
